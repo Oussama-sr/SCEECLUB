@@ -985,6 +985,93 @@
           <option>Other</option>
         </select>
 
+        <!-- Interest -->
+        <select name="interest" required
+               class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
+          <option value="">Select Your Main Interest</option>
+          <option>Technical Team</option>
+          <option>Media Team</option>
+          <option>Design Team</option>
+          <option>Marketing Team</option>
+          <option>Events Organization</option>
+          <option>Workshops & Training</option>
+        </select>
+                <!-- Hobbies / Skills -->
+        <div>
+          <input id="hobbiesInput" name="hobbies" placeholder="Type a skill and press Enter..." 
+                 class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
+        </div>
+
+        <!-- Experience -->
+        <select name="experience"
+                class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
+          <option value="">Experience Level</option>
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+        </select>
+                            <!-- Tagify Library -->
+                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+                            <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+                            <script>
+                                const input = document.querySelector("#hobbiesInput");
+                                const suggestions = [
+                                    "Photography", "Videography", "Video Editing", "Graphic Design", "UI/UX Design",
+                                    "Programming", "Web Development", "Arduino", "Robotics", "Podcast Hosting",
+                                    "Public Speaking", "Content Creation", "Social Media Management",
+                                    "Event Organization", "3D Design", "Animation", "Blender 3D"
+                                ];
+
+                                const tagify = new Tagify(input, {
+                                    whitelist: suggestions,
+                                    enforceWhitelist: false,
+                                    delimiters: ",|Enter",
+                                    dropdown: { maxItems: 4, enabled: 0, classname: 'tagify__dropdown_custom', closeOnSelect: false },
+                                    classNames: {
+                                        tag: 'tagify__tag bg-primary-600 text-white rounded-full px-3 py-1 flex items-center gap-1',
+                                        tagText: 'tagify__tag-text',
+                                        tagRemove: 'tagify__tag__remove text-white hover:text-gray-200'
+                                    }
+                                });
+                            </script>
+                            
+                            <style>
+                                .tagify {
+                                   
+                                    --tag-bg:#e40c0c;
+                                    --tag-border-radius:15px;
+                                    tag-text-color:#ffffff;
+                                    --placeholder-color: #2727279c;
+                                    
+                            
+                                }
+                            
+                                .dark .tagify {
+                                    --tagify-dd-bg-color: #1f2937;
+                                    --placeholder-color: #c1c1c19c;
+                                    
+                                }
+                            
+                                .tagify__dropdown_custom {
+                                    --tagify-dd-bg-color:#ffffff
+                                }
+                            
+                                .tagify__dropdown_custom .tagify__dropdown__item:hover {
+                                    background-color: #fc0000;
+                                }
+                            
+                                .dark .tagify__dropdown_custom {
+                                    background-color: #2319a9;
+                                    border-color: #374151;
+                                    --placeholder-color: #c1c1c19c;
+                                }
+                            
+                                .dark .tagify__dropdown_custom .tagify__dropdown__item:hover {
+                                    background-color: #d90517;
+                                }
+                            </style>
+
+
         <button type="button" onclick="submitApplication()"
                 class="w-full py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-all">
           Submit Application
@@ -993,6 +1080,7 @@
 
       <!-- Success message -->
       <p id="successMsg" class="hidden mt-4 text-green-600 dark:text-green-400 text-center font-medium">Thank you! Your application has been submitted.</p>
+      <p id="ghaletMsg" class="hidden mt-4 text-red-600 dark:text-red-400 text-center font-medium">Thank you! Your application has been submitted.</p>
 
     </div>
   </div>
@@ -1034,30 +1122,68 @@
             document.getElementById('joinModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
-       function submitApplication() {
+      // Submit to Google Sheets with validation
+function submitApplication() {
   const form = document.getElementById("joinForm");
-  const formData = new FormData(form);
+  const submitButton = form.querySelector("button[type=button]");
+  const successMsg = document.getElementById("successMsg");
 
-  fetch("https://script.google.com/macros/s/AKfycbzZ0TwIi3bjA7AAJsQiaoZqhMdbnu9757g6S36adZuYJ5KYRZoFH2gY2kDy8aIvQuiTBQ/exec", {
+  // Collect values
+  const fullName = form.full_name.value.trim();
+  const email = form.email.value.trim();
+  const studentId = form.student_id.value.trim();
+  const department = form.department.value.trim();
+  const interest = form.interest.value.trim();
+  const skills = tagify.value.map(item => item.value); // Array of skills
+  const experience = form.experience.value.trim();
+
+  // Validation: prevent empty required fields
+  if (!fullName || !email || !studentId || !department || !interest || skills.length === 0) {
+        ghaletMsg.classList.remove("hidden");
+        ghaletMsg.innerText = "Please fill in all required fields and add at least one skill ⚠️";
+        ghaletMsg.classList.remove("text-green-600");
+        ghaletMsg.classList.add("text-red-600");
+      form.reset();
+    return; // Stop submission
+  }
+
+  // Disable button & show submitting
+  submitButton.disabled = true;
+  submitButton.innerText = "Submitting...";
+
+  // Prepare FormData
+  const formData = new FormData(form);
+  formData.set("hobbies", JSON.stringify(skills));
+
+  // Submit to Google Sheets
+  fetch("https://script.google.com/macros/s/AKfycbyMriqIlO9RAEelDpvgFOxJYouugNZTILGyeiQLN2Nfvbws4tSvUwJdA9755ZY_k9DE/exec", {
     method: "POST",
     body: formData
   })
   .then(res => res.text())
   .then(text => {
-    console.log("Server response:", text);
-
     if (text.toLowerCase().includes("success")) {
-      alert("Application sent successfully ✅");
+      successMsg.classList.remove("hidden");
+      successMsg.innerText = "Thank you! Your application has been submitted.";
       form.reset();
-      closeModal(); // remove if you don't use modal
+      tagify.removeAllTags();
+      submitButton.innerText = "Submitted ✅";
+    } else if (text.toLowerCase().includes("already submitted")) {
+      successMsg.classList.remove("hidden");
+      successMsg.innerText = "You already submitted! ⚠️";
+      submitButton.innerText = "Already submitted";
     } else {
       alert("Server error ❌");
       console.error(text);
+      submitButton.disabled = false;
+      submitButton.innerText = "Submit Application";
     }
   })
   .catch(err => {
     console.error(err);
     alert("Network error ❌");
+    submitButton.disabled = false;
+    submitButton.innerText = "Submit Application";
   });
 }
 
