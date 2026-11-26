@@ -954,85 +954,13 @@
   <!-- Modal -->
       
       <!-- Close Button -->
-      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-        <i class="fas fa-times text-xl"></i>
-      </button>
+    
+    
 
-      <!-- Header -->
-      <div class="text-center mb-6">
-        <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-user-plus text-2xl text-primary-600"></i>
-        </div>
-        <h3 class="font-tech text-2xl font-bold text-gray-900 dark:text-white">Join SCEE</h3>
-        <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">Start your journey into electrical engineering excellence</p>
-      </div>
-
-      <!-- Form -->
-      <form id="joinForm" class="space-y-4">
-        <input type="text" name="full_name" placeholder="Full Name" required
-               class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-        <input type="email" name="email" placeholder="Email" required
-               class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-        <input type="text" name="student_id" placeholder="Student ID" required
-               class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-        <select name="department" required
-               class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-          <option value="">Select Department</option>
-          <option>Electrical Engineering</option>
-          <option>Computer Engineering</option>
-          <option>Mechanical Engineering</option>
-          <option>Other</option>
-        </select>
-
-        <!-- Interest -->
-        <select name="interest" required
-               class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-          <option value="">Select Your Main Interest</option>
-          <option>Technical Team</option>
-          <option>Media Team</option>
-          <option>Design Team</option>
-          <option>Marketing Team</option>
-          <option>Events Organization</option>
-          <option>Workshops & Training</option>
-        </select>
-                <!-- Hobbies / Skills -->
-        <div>
-          <input id="hobbiesInput" name="hobbies" placeholder="Type a skill and press Enter..." 
-                 class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-        </div>
+        
 
         <!-- Experience -->
-        <select name="experience"
-                class="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none">
-          <option value="">Experience Level</option>
-          <option>Beginner</option>
-          <option>Intermediate</option>
-          <option>Advanced</option>
-        </select>
-                            <!-- Tagify Library -->
-                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
-                            <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-                            <script>
-                                const input = document.querySelector("#hobbiesInput");
-                                const suggestions = [
-                                    "Photography", "Videography", "Video Editing", "Graphic Design", "UI/UX Design",
-                                    "Programming", "Web Development", "Arduino", "Robotics", "Podcast Hosting",
-                                    "Public Speaking", "Content Creation", "Social Media Management",
-                                    "Event Organization", "3D Design", "Animation", "Blender 3D"
-                                ];
-
-                                const tagify = new Tagify(input, {
-                                    whitelist: suggestions,
-                                    enforceWhitelist: false,
-                                    delimiters: ",|Enter",
-                                    dropdown: { maxItems: 4, enabled: 0, classname: 'tagify__dropdown_custom', closeOnSelect: false },
-                                    classNames: {
-                                        tag: 'tagify__tag bg-primary-600 text-white rounded-full px-3 py-1 flex items-center gap-1',
-                                        tagText: 'tagify__tag-text',
-                                        tagRemove: 'tagify__tag__remove text-white hover:text-gray-200'
-                                    }
-                                });
-                            </script>
+    
                             
                             <style>
                                 .tagify {
@@ -1069,18 +997,6 @@
                                     background-color: #d90517;
                                 }
                             </style>
-
-
-        <button type="button" onclick="submitApplication()"
-                class="w-full py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-all">
-          Submit Application
-        </button>
-      </form>
-
-      <!-- Success message -->
-      <p id="successMsg" class="hidden mt-4 text-green-600 dark:text-green-400 text-center font-medium">Thank you! Your application has been submitted.</p>
-      <p id="ghaletMsg" class="hidden mt-4 text-red-600 dark:text-red-400 text-center font-medium">Thank you! Your application has been submitted.</p>
-
     </div>
   </div>
 </div>
@@ -1114,73 +1030,7 @@
         // Modal Functions
     
 
-        function closeModal() {
-            document.getElementById('joinModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-      // Submit to Google Sheets with validation
-function submitApplication() {
-  const form = document.getElementById("joinForm");
-  const submitButton = form.querySelector("button[type=button]");
-  const successMsg = document.getElementById("successMsg");
 
-  // Collect values
-  const fullName = form.full_name.value.trim();
-  const email = form.email.value.trim();
-  const studentId = form.student_id.value.trim();
-  const department = form.department.value.trim();
-  const interest = form.interest.value.trim();
-  const skills = tagify.value.map(item => item.value); // Array of skills
-  const experience = form.experience.value.trim();
-
-  // Validation: prevent empty required fields
-  if (!fullName || !email || !studentId || !department || !interest || skills.length === 0) {
-        ghaletMsg.classList.remove("hidden");
-        ghaletMsg.innerText = "Please fill in all required fields and add at least one skill ⚠️";
-        ghaletMsg.classList.remove("text-green-600");
-        ghaletMsg.classList.add("text-red-600");
-    return; // Stop submission
-  }
-
-  // Disable button & show submitting
-  submitButton.disabled = true;
-  submitButton.innerText = "Submitting...";
-
-  // Prepare FormData
-  const formData = new FormData(form);
-  formData.set("hobbies", JSON.stringify(skills));
-
-  // Submit to Google Sheets
-  fetch("https://script.google.com/macros/s/AKfycbyMriqIlO9RAEelDpvgFOxJYouugNZTILGyeiQLN2Nfvbws4tSvUwJdA9755ZY_k9DE/exec", {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.text())
-  .then(text => {
-    if (text.toLowerCase().includes("success")) {
-      successMsg.classList.remove("hidden");
-      successMsg.innerText = "Thank you! Your application has been submitted.";
-      form.reset();
-      tagify.removeAllTags();
-      submitButton.innerText = "Submitted ✅";
-    } else if (text.toLowerCase().includes("already submitted")) {
-      successMsg.classList.remove("hidden");
-      successMsg.innerText = "You already submitted! ⚠️";
-      submitButton.innerText = "Already submitted";
-    } else {
-      alert("Server error ❌");
-      console.error(text);
-      submitButton.disabled = false;
-      submitButton.innerText = "Submit Application";
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Network error ❌");
-    submitButton.disabled = false;
-    submitButton.innerText = "Submit Application";
-  });
-}
 
 
 
